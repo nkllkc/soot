@@ -131,7 +131,10 @@ public final class OnFlyCallGraphBuilder {
   protected final NumberedString sigStart = Scene.v().getSubSigNumberer().findOrAdd("void start()");
   protected final NumberedString sigRun = Scene.v().getSubSigNumberer().findOrAdd("void run()");
   protected final NumberedString sigExecute
-      = Scene.v().getSubSigNumberer().findOrAdd("android.os.AsyncTask execute(java.lang.Object[])");
+          = Scene.v().getSubSigNumberer().findOrAdd("android.os.AsyncTask execute(java.lang.Object[])");
+  protected final NumberedString sigExecuteOnExecutor
+          = Scene.v().getSubSigNumberer()
+              .findOrAdd("android.os.AsyncTask executeOnExecutor(java.util.concurrent.Executor,java.lang.Object[])");
   protected final NumberedString sigExecutorExecute
       = Scene.v().getSubSigNumberer().findOrAdd("void execute(java.lang.Runnable)");
   protected final NumberedString sigHandlerPost
@@ -784,7 +787,7 @@ public final class OnFlyCallGraphBuilder {
               || subSig == sigHandlerSendMessageAtFrontOfQueue || subSig == sigHandlerSendMessageAtTime
               || subSig == sigHandlerSendMessageDelayed) {
             addVirtualCallSite(s, m, receiver, iie, sigHandlerHandleMessage, Kind.HANDLER);
-          } else if (subSig == sigExecute) {
+          } else if (subSig == sigExecute || subSig == sigExecuteOnExecutor) {
             addVirtualCallSite(s, m, receiver, iie, sigDoInBackground, Kind.ASYNCTASK);
           }
         } else if (ie instanceof DynamicInvokeExpr) {
